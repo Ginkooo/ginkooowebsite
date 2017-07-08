@@ -1,16 +1,16 @@
 class HttpRequest:
     def __init__(self, data: bytes):
-        length = len(data)
         first_nl_idx = data.find(b'\r\n')
-        header = data[:first_nl_idx + 1]
+        header = data[:first_nl_idx]
         method, url, version = header.split(b' ')
         double_nl_idx = data.find(b'\r\n\r\n')
 
-        params = data[first_nl_idx + 2:double_nl_idx + 1]
+        params = data[first_nl_idx + 2:double_nl_idx]
 
-        print(method, url, version)
-        print(params)
 
         self.method = method
         self.url = url
         self.version = version
+
+        for param in params.splitlines():
+            key, value = param.split(b':', 1)
