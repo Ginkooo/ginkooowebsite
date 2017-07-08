@@ -1,0 +1,2 @@
+class HttpResponse:
+    pass
