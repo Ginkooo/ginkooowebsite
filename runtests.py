@@ -54,6 +54,10 @@ def run_tests_from(filepath: str) -> list:
         try:
             isok = True
             tb = None
+            try:
+                instantion.prep()
+            except:
+                pass
             function(instantion)
         except Exception as e:
             tb = e.__traceback__

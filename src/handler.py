@@ -1,4 +1,5 @@
 from .http.http_request import HttpRequest
+from . import dispatcher
 
 
 def handle(data: bytes) -> bytes:
@@ -11,4 +12,5 @@ def handle(data: bytes) -> bytes:
     :rtype: bytes - bytes to send back to client
     """
     http_request = HttpRequest(data)
-    return b'dupa'
+    response = dispatcher.dispach(http_request)
+    return response.get_as_bytes()
