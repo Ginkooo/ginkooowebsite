@@ -25,7 +25,8 @@ class HttpResponseTests(TestCase):
         self.request = MagicMock()
         self.request.version = b'HTTP/1.1'
         self.request.params = {}
-        self.request.params['content-length'] = bytes(len(b'HTTP/1.1'))
+        body_len = str(len(b'example body')).encode('ascii')
+        self.request.params['content-length'] = body_len
 
     def check_if_can_make_response_object(self):
         response = HttpResponse(self.request, b'example body')
@@ -33,10 +34,8 @@ class HttpResponseTests(TestCase):
 
     def check_can_get_response_as_bytes(self):
         response = HttpResponse(self.request, b'example body')
-        expected = self.request.version + b' 200 OK\r\n' +\
-            b'content-length: ' +\
-            self.request.params['content-length'] +\
-            b'\r\n\r\n' + b'example body'
-        print(self.request.params)
-        print(expected)
+        expected = self.request.version +\
+            b' 200 OK\r\n' + b'content-length: ' +\
+            self.request.params['content-length'] + b'\r\n\r\n' +\
+            b'example body'
         self.assertEqual(expected, response.get_as_bytes())

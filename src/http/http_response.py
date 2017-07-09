@@ -21,7 +21,7 @@ class HttpResponse:
         self.version = http_request.version
         self.status = status
         self.status_info = http_constans.status_info[status]
-        self.params['content-legth'] = bytes(len(body))
+        self.params['content-length'] = str(len(body)).encode('ascii')
         self.body = body
 
     def get_as_bytes(self) -> bytes:
@@ -30,7 +30,8 @@ class HttpResponse:
         :returns: HTTP response prepared for sending
         :rtype: bytes
         """
-        header = self.version + b' ' + bytes(self.status) + b' ' +\
+        header = self.version + b' ' +\
+            str(self.status).encode('ascii') + b' ' +\
             self.status_info + b'\r\n'
         params = b''
         for key, value in self.params.items():
