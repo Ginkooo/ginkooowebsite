@@ -3,6 +3,7 @@
 import os
 import importlib.util
 import unittest
+import traceback
 
 
 def get_instantion_function_pairs_from_module(module) -> list:
@@ -33,7 +34,7 @@ def get_instantion_function_pairs_from_module(module) -> list:
     return pairs
 
 
-def run_tests_from(filepath: str):
+def run_tests_from(filepath: str) -> list:
     """run_tests_from
     Loads module from given filepath and run tests within it
 
@@ -45,14 +46,31 @@ def run_tests_from(filepath: str):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     pairs = get_instantion_function_pairs_from_module(module)
+
+    passes = fails = 0
+
     for instantion, function in pairs:
         print('Running {}...'.format(function.__name__), end=' ')
-        function(instantion)
-        print('OK')
+        try:
+            isok = True
+            exc = None
+            function(instantion)
+        except Exception as e:
+            exc = e.__traceback__
+            isok = False
+        print('OK' if isok else 'FAIL')
+        if not isok:
+            print()
+            fails += 1
+            traceback.print_tb(exc)
+        else:
+            passes += 1
+
+    return passes, fails
 
 
 if __name__ == '__main__':
-    i = 0
+    passed = failed = 0
     for root, dirs, files in os.walk('./tests'):
         if '__pycache__' in root:
             continue
@@ -61,7 +79,9 @@ if __name__ == '__main__':
                 continue
             if not f.endswith('.py'):
                 continue
-            i += 1
-            run_tests_from(os.path.join(root, f))
+            passes, fails = run_tests_from(os.path.join(root, f))
+            passed += passes
+            failed += fails
     print()
-    print('RAN {} TESTS'.format(i))
+    print('RAN {} TESTS, {} passes, {} fails'.format(passed + failed,
+                                                     passed, failed))
