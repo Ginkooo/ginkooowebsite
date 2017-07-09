@@ -53,16 +53,17 @@ def run_tests_from(filepath: str) -> list:
         print('Running {}...'.format(function.__name__), end=' ')
         try:
             isok = True
-            exc = None
+            tb = None
             function(instantion)
         except Exception as e:
-            exc = e.__traceback__
+            tb = e.__traceback__
+            exc = e
             isok = False
         print('OK' if isok else 'FAIL')
         if not isok:
             print()
             fails += 1
-            traceback.print_tb(exc)
+            traceback.print_exception(type(exc), exc, tb)
         else:
             passes += 1
 
