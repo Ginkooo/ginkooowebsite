@@ -11,7 +11,7 @@ class HttpRequestTests(TestCase):
 
     def check_if_can_encaplulate_POST_http_request_with_body(self):
         request = HttpRequest(b'POST /favicon.ico HTTP/1.1\r\n' +
+                              b'content-length: 28\r\n' +
                               b'User-Agent: Mozilla 5.0\r\n\r\n' +
-                              b'content-leght: 28' +
                               b'username=Ginko&password=asdf')
-        self.assertEqual(request.post['username'], b'Ginko')
+        self.assertEqual(request.post[b'username'], b'Ginko')
