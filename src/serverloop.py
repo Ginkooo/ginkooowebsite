@@ -1,6 +1,6 @@
 import socketserver
 from . import handler
-from .config import settings
+from config import settings
 
 
 class RequestHandler(socketserver.BaseRequestHandler):
