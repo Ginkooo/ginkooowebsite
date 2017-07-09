@@ -49,15 +49,19 @@ def run_tests_from(filepath: str):
         print('Running {}...'.format(function.__name__), end=' ')
         function(instantion)
         print('OK')
-    print()
-    print('RAN {} TESTS'.format(len(pairs)))
 
 
 if __name__ == '__main__':
+    i = 0
     for root, dirs, files in os.walk('./tests'):
         if '__pycache__' in root:
             continue
         for f in files:
             if f.startswith('__'):
                 continue
+            if not f.endswith('.py'):
+                continue
+            i += 1
             run_tests_from(os.path.join(root, f))
+    print()
+    print('RAN {} TESTS'.format(i))
