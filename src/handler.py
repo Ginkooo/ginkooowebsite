@@ -15,11 +15,10 @@ def handle(data: bytes) -> bytes:
     """
     http_request = HttpRequest(data)
     url = http_request.url
-    print(url)
     resolved = resolver.resolve_method_and_args_from_url(url)
     if not resolved:
-        return HttpResponse(http_request,
-                            b'URL line that has not been found',
+        return HttpResponse(http_request,  # TODO Make some nice 404 page
+                            b'Not found',
                             404).get_as_bytes()
     method, args, kwargs = resolved
     response = method(http_request, *args, **kwargs)

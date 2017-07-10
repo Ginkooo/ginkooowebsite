@@ -11,7 +11,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 
 
 def start():
+    socketserver.TCPServer.allow_reuse_address = settings.DEBUG
     server = socketserver.TCPServer((settings.HOST, settings.PORT),
                                     RequestHandler)
-    server.allow_reuse_address = settings.DEBUG
     server.serve_forever()

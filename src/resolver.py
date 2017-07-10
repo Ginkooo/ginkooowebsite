@@ -17,14 +17,13 @@ def get_parts_of_url(url: str) -> tuple:
     if '?' in url:
         url, query_string = url.split('?', 1)
     url = url.strip('/')
-    print(url)
     params = []
     qs_params = {}
     parts = url.split('/')
     if len(parts) > 1:
         controller, action, *params = parts
     else:
-        controller = settings.DEFAULT_CONTROLLER if not url else url[0]
+        controller = settings.DEFAULT_CONTROLLER if not url else parts[0]
         action = settings.DEFAULT_ACTION
     try:
         query_string
@@ -51,12 +50,9 @@ def resolve_method_and_args_from_url(url: bytes) -> tuple:
     if '?' in url:
         url, query_string = url.split('?')
     controller, action, params, qs_params = get_parts_of_url(url)
-    print(controller, action, params)
-    if controller == '/':
-        controller = 'home'
     controller = controller + '.py'
 
-    path = os.path.join('controllers', controller)
+    path = os.path.join('src', 'controllers', controller)
     if not(os.path.exists(path) and os.path.isfile(path)):
         print('There is no controller {}'.format(controller))
         return None
