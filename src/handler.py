@@ -1,10 +1,12 @@
-from .http.http_request import HttpRequest
-from src.dispatchers import dispatcher
+from src.http.http_request import HttpRequest
+from src.http.http_response import HttpResponse
+import src.resolver as resolver
 
 
 def handle(data: bytes) -> bytes:
     """handle
-    Handles data recieved from client and returns a response
+    Resolves correct action to use for requested url and
+    executes it
 
     :param data: HTTP protocol compatible message
     :type data: bytes
@@ -12,5 +14,13 @@ def handle(data: bytes) -> bytes:
     :rtype: bytes - bytes to send back to client
     """
     http_request = HttpRequest(data)
-    response = dispatcher.dispatch(http_request)
+    url = http_request.url
+    print(url)
+    resolved = resolver.resolve_method_and_args_from_url(url)
+    if not resolved:
+        return HttpResponse(http_request,
+                            b'URL line that has not been found',
+                            404).get_as_bytes()
+    method, args, kwargs = resolved
+    response = method(http_request, *args, **kwargs)
     return response.get_as_bytes()

@@ -4,3 +4,6 @@ DEBUG = True
 
 # Root location of files accessible from web
 PUBLIC_DIR = './public'
+
+DEFAULT_CONTROLLER = 'home'
+DEFAULT_ACTION = 'index'
