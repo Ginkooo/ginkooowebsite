@@ -14,4 +14,5 @@ def start():
     socketserver.TCPServer.allow_reuse_address = settings.DEBUG
     server = socketserver.TCPServer((settings.HOST, settings.PORT),
                                     RequestHandler)
+    print('Running server on port {}'.format(settings.PORT))
     server.serve_forever()

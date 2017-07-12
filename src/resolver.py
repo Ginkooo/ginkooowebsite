@@ -52,7 +52,7 @@ def resolve_method_and_args_from_url(url: bytes) -> tuple:
     controller, action, params, qs_params = get_parts_of_url(url)
     controller = controller + '.py'
 
-    path = os.path.join('src', 'controllers', controller)
+    path = os.path.join('controllers', controller)
     if not(os.path.exists(path) and os.path.isfile(path)):
         print('There is no controller {}'.format(controller))
         return None
@@ -72,3 +72,10 @@ def resolve_method_and_args_from_url(url: bytes) -> tuple:
 
     function = getattr(module, action)
     return (function, params, kwargs)
+
+
+def resolve_resource_path_from_url(url: bytes) -> str:
+    parts = url.decode('utf-8').strip().strip('2%').replace('.', '').split('/')
+    path = os.path.join('public', *parts)
+    print(f'path is {path}')
+    return path

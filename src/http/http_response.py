@@ -1,5 +1,5 @@
 from .http_request import HttpRequest
-from . import http_constans
+from . import http_constants
 
 
 class HttpResponse:
@@ -20,12 +20,13 @@ class HttpResponse:
         self.params = {}
         self.version = http_request.version
         self.status = status
-        self.status_info = http_constans.status_info[status]
+        self.status_info = http_constants.status_info[status]
         self.params['content-length'] = str(len(body)).encode('ascii')
         self.body = body
 
     def get_as_bytes(self) -> bytes:
         """get_as_bytes
+        gets http message response in a form prepared to send
 
         :returns: HTTP response prepared for sending
         :rtype: bytes
