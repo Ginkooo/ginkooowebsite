@@ -32,6 +32,7 @@ def get_file(filepath: str, dictionary: dict={}) -> bytes:
     :rtype: bytes
     """
     if not(os.path.exists(filepath) and os.path.isfile(filepath)):
+        print(f'Could not load file {filepath}')
         return None
 
     with open(filepath, 'rb') as f:

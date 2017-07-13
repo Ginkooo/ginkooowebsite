@@ -1,5 +1,5 @@
 import os
-import importlib
+import importlib.util
 from config import settings
 
 
@@ -75,7 +75,7 @@ def resolve_method_and_args_from_url(url: bytes) -> tuple:
 
 
 def resolve_resource_path_from_url(url: bytes) -> str:
-    parts = url.decode('utf-8').strip().strip('2%').replace('.', '').split('/')
+    parts = url.decode('utf-8').strip().strip('2%').split('/')
     path = os.path.join('public', *parts)
     print(f'path is {path}')
     return path
